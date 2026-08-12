@@ -53,6 +53,18 @@ docker-prune-plan system --json
 
 ```
 
+## Running from source
+
+If you have [uv](https://docs.astral.sh/uv/) and [just](https://just.systems/), you can run without installing:
+
+```bash
+# Run without building
+just run system
+
+# Pass arguments through
+just run image --all
+```
+
 ## Notes
 
 - --all is supported for system and image (affects images only), and for volume (includes named volumes).

@@ -14,6 +14,11 @@ build:
     @echo "Building wheel..."
     uv build
 
+# Run without building
+run *args:
+    @echo "Running docker-prune-plan..."
+    uv run docker-prune-plan {{ args }}
+
 # Run tests
 [group("qa")]
 test *args:
