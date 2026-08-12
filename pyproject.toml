@@ -31,7 +31,7 @@
         docker-prune-plan = "docker_prune_plan.cli:main"
 
     [project.optional-dependencies]
-        dev = ["deptry"]
+        dev = ["deptry", "pytest"]
 
 [build-system]
     requires      = ["uv_build>=0.12.3,<0.13"]
