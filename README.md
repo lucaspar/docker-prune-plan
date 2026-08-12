@@ -7,24 +7,29 @@
 
 Best-effort preview of what Docker prune commands would delete (`system`, `image`, `container`, `volume`, `network`). Implemented as a Python CLI.
 
+## Run without installing (using [uv](https://docs.astral.sh/uv/reference/cli/#uv-tool:~:text=%2D%2Dfrom.-,uvx,-can%20be%20used)) - Recommended
 
-### Run without installing (using [uv](https://docs.astral.sh/uv/reference/cli/#uv-tool:~:text=%2D%2Dfrom.-,uvx,-can%20be%20used)) - Recommended
 If you use [uv](https://docs.astral.sh/uv/reference/cli/#uv-tool:~:text=%2D%2Dfrom.-,uvx,-can%20be%20used), you can run the tool without installing it globally:
 
 ```bash
 # example: preview docker system prune
 uvx docker-prune-plan system
 ```
+
 ## Install
 
 ### Option 1: PyPI
+
 Use `pip` or `pipx` to install the latest stable version:
 
 ```bash
 pip install docker-prune-plan
 ```
+
 ### Option 2: Github releases
+
 Install the latest release directly:
+
 ```bash
 pip install https://github.com/wahabmangat/docker-prune-plan/releases/download/v0.2.1/docker_prune_plan-0.2.1-py3-none-any.whl
 ```
@@ -65,7 +70,9 @@ docker-prune-plan network
 docker-prune-plan system --json
 
 ```
+
 ## Notes
+
 - --all is supported for system and image (affects images only), and for volume (includes named volumes).
 - Label/Filter support is not implemented yet.
 - The tool prints a **Plan Reclaimable Space** total based on the listed items. Differences from other Docker disk usage reports can occur due to shared image layers and build cache internals.

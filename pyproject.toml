@@ -1,40 +1,50 @@
 [project]
-name = "docker-prune-plan"
-version = "0.2.1"
-description = "Dry-run view of what docker prune commands would delete"
-readme = "README.md"
-requires-python = ">=3.8"
-dependencies = ["docker>=7.0.0"]
+    name            = "docker-prune-plan"
+    version         = "0.2.1"
+    description     = "Dry-run view of what docker prune commands would delete"
+    readme          = "README.md"
+    requires-python = ">=3.8"
+    dependencies    = ["docker>=7.0.0"]
 
-authors = [
-    {name = "Abdul Wahab", email = "abdulwahabmangat@gmail.com"}
-]
+    authors = [{ name = "Abdul Wahab", email = "abdulwahabmangat@gmail.com" }]
 
-license = {text = "MIT"}
+    license = { text = "MIT" }
 
-keywords = ["docker", "prune", "cleanup", "cli", "dry-run"]
+    keywords = ["cleanup", "cli", "docker", "dry-run", "prune"]
 
-classifiers = [
-    "Environment :: Console",
-    "Intended Audience :: Developers",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Topic :: System :: Systems Administration",
-    "Topic :: Utilities",
-]
+    classifiers = [
+        "Environment :: Console",
+        "Intended Audience :: Developers",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+        "Topic :: System :: Systems Administration",
+        "Topic :: Utilities",
+    ]
 
-[project.urls]
-Homepage = "https://github.com/wahabmangat/docker-prune-plan"
-Repository = "https://github.com/wahabmangat/docker-prune-plan"
-Issues = "https://github.com/wahabmangat/docker-prune-plan/issues"
-Changelog = "https://github.com/wahabmangat/docker-prune-plan/blob/main/CHANGELOG.md"
+    [project.urls]
+        Changelog  = "https://github.com/wahabmangat/docker-prune-plan/blob/main/CHANGELOG.md"
+        Homepage   = "https://github.com/wahabmangat/docker-prune-plan"
+        Issues     = "https://github.com/wahabmangat/docker-prune-plan/issues"
+        Repository = "https://github.com/wahabmangat/docker-prune-plan"
 
-[project.scripts]
-docker-prune-plan = "docker_prune_plan.cli:main"
+    [project.scripts]
+        docker-prune-plan = "docker_prune_plan.cli:main"
+
+    [project.optional-dependencies]
+        dev = ["deptry"]
 
 [build-system]
-requires = ["setuptools>=67", "wheel"]
-build-backend = "setuptools.build_meta"
+    requires      = ["setuptools>=67", "wheel"]
+    build-backend = "setuptools.build_meta"
+
+[tool.deptry]
+    ignore = ["DEP002"]
 
 [tool.setuptools.packages.find]
-where = ["."]
+    where = ["."]
+
+[[tool.ty.overrides]]
+    include = ["docker_prune_plan/**"]
+
+    [tool.ty.overrides.rules]
+        not-iterable = "ignore"
