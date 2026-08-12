@@ -6,7 +6,7 @@ import re
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Dict, List, Sequence, Set, Tuple
+from typing import Sequence
 
 import docker
 from docker.errors import DockerException
@@ -22,7 +22,7 @@ class PruneItem:
     human_size: str = ""
     description: str = ""
 
-    def to_dict(self) -> Dict[str, object]:
+    def to_dict(self) -> dict[str, object]:
         return {
             "type": self.item_type,
             "id": self.item_id,
@@ -68,7 +68,7 @@ def parse_human_size_to_bytes(text: str) -> int | None:
 
 
 def render_table(
-    items: Sequence[PruneItem], exclude_columns: Set[str] | None = None
+    items: Sequence[PruneItem], exclude_columns: set[str] | None = None
 ) -> str:
     if exclude_columns is None:
         exclude_columns = set()
@@ -76,7 +76,7 @@ def render_table(
     headers = [h for h in all_headers if h not in exclude_columns]
     column_indices = [i for i, h in enumerate(all_headers) if h not in exclude_columns]
 
-    rows: List[List[str]] = [
+    rows: list[list[str]] = [
         [item.item_type, item.item_id, item.name, item.human_size, item.description]
         for item in items
     ]
@@ -102,8 +102,8 @@ def short_id(full_id: str) -> str:
     return full_id[:12]
 
 
-def collect_used_volumes(containers: Sequence[Dict[str, object]]) -> Set[str]:
-    used: Set[str] = set()
+def collect_used_volumes(containers: Sequence[dict[str, object]]) -> set[str]:
+    used: set[str] = set()
     for container in containers:
         for mount in container.get("Mounts", []) or []:
             if mount.get("Type") == "volume" and mount.get("Name"):
@@ -117,8 +117,8 @@ def normalize_image_id(v: str) -> str:
     return v if v.startswith("sha256:") else f"sha256:{v}"
 
 
-def collect_used_images(containers: Sequence[Dict[str, object]]) -> Set[str]:
-    used: Set[str] = set()
+def collect_used_images(containers: Sequence[dict[str, object]]) -> set[str]:
+    used: set[str] = set()
     for container in containers:
         image_id = container.get("ImageID")
         if image_id:
@@ -139,8 +139,8 @@ def is_probably_anonymous_volume(name: str) -> bool:
     return re.fullmatch(r"[0-9a-f]{32,64}", name) is not None
 
 
-def build_plan_container(client: docker.APIClient) -> Tuple[List[PruneItem], int]:
-    plan: List[PruneItem] = []
+def build_plan_container(client: docker.APIClient) -> tuple[list[PruneItem], int]:
+    plan: list[PruneItem] = []
     total = 0
     stopped = client.containers(
         all=True, filters={"status": ["created", "exited", "dead"]}, size=True
@@ -166,8 +166,8 @@ def build_plan_container(client: docker.APIClient) -> Tuple[List[PruneItem], int
 
 def build_plan_image(
     client: docker.APIClient, include_all: bool
-) -> Tuple[List[PruneItem], int]:
-    plan: List[PruneItem] = []
+) -> tuple[list[PruneItem], int]:
+    plan: list[PruneItem] = []
     total = 0
     all_containers = client.containers(all=True)
     used_images = collect_used_images(all_containers)
@@ -212,8 +212,8 @@ def build_plan_image(
 
 def build_plan_volume(
     client: docker.APIClient, include_all: bool, system_mode: bool
-) -> Tuple[List[PruneItem], int]:
-    plan: List[PruneItem] = []
+) -> tuple[list[PruneItem], int]:
+    plan: list[PruneItem] = []
     total = 0
 
     all_containers = client.containers(all=True)
@@ -253,8 +253,8 @@ def build_plan_volume(
     return plan, total
 
 
-def build_plan_network(client: docker.APIClient) -> Tuple[List[PruneItem], int]:
-    plan: List[PruneItem] = []
+def build_plan_network(client: docker.APIClient) -> tuple[list[PruneItem], int]:
+    plan: list[PruneItem] = []
     total = 0
 
     networks = client.networks()
@@ -287,8 +287,8 @@ def build_plan_network(client: docker.APIClient) -> Tuple[List[PruneItem], int]:
     return plan, total
 
 
-def build_plan_build_cache(client: docker.APIClient) -> Tuple[List[PruneItem], int]:
-    plan: List[PruneItem] = []
+def build_plan_build_cache(client: docker.APIClient) -> tuple[list[PruneItem], int]:
+    plan: list[PruneItem] = []
     total = 0
     df_data = client.df()
     build_cache = df_data.get("BuildCache") or []
@@ -316,8 +316,8 @@ def build_plan_build_cache(client: docker.APIClient) -> Tuple[List[PruneItem], i
 
 def build_plan_system(
     client: docker.APIClient, include_all_images: bool, include_volumes: bool
-) -> Tuple[List[PruneItem], int]:
-    plan: List[PruneItem] = []
+) -> tuple[list[PruneItem], int]:
+    plan: list[PruneItem] = []
     total = 0
 
     items, t = build_plan_container(client)
@@ -356,7 +356,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
     p_image = sub.add_parser(
         "image",
-        help="List images that would be pruned",
+        help="list images that would be pruned",
         description="Show dangling or unused images and their reclaimable space.",
     )
     p_image.add_argument(
@@ -373,7 +373,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
     p_volume = sub.add_parser(
         "volume",
-        help="List volumes that would be pruned",
+        help="list volumes that would be pruned",
         description="Show unused volumes and their reclaimable space.",
     )
     p_volume.add_argument(
@@ -390,7 +390,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
     p_container = sub.add_parser(
         "container",
-        help="List stopped containers that would be pruned",
+        help="list stopped containers that would be pruned",
         description="Show stopped containers eligible for pruning and their reclaimable space.",
     )
     p_container.add_argument(
@@ -401,7 +401,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
     p_network = sub.add_parser(
         "network",
-        help="List unused networks that would be pruned",
+        help="list unused networks that would be pruned",
         description="Show user-defined networks with no attached containers.",
     )
     p_network.add_argument(
@@ -412,7 +412,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
     p_system = sub.add_parser(
         "system",
-        help="List everything that would be pruned",
+        help="list everything that would be pruned",
         description=(
             "Show containers, networks, images, optional volumes, and build cache "
             "that would be removed by docker system prune."
@@ -492,7 +492,7 @@ def main(argv: Sequence[str] | None = None) -> None:
         print(json.dumps(out, indent=2))
         return
 
-    exclude_columns: Set[str] = set()
+    exclude_columns: set[str] = set()
     if args.cmd == "system" and not args.name:
         exclude_columns.add("NAME")
 
