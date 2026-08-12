@@ -1,6 +1,7 @@
-# [docker-prune-plan](https://pypi.org/project/docker-prune-plan/)
+# docker-prune-plan
 
-[![PyPI version](https://badge.fury.io/py/docker-prune-plan.svg)](https://badge.fury.io/py/docker-prune-plan)
+> **Note:** This is a fork of [wahabmangat/docker-prune-plan](https://github.com/wahabmangat/docker-prune-plan).
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **See what Docker’s prune commands are about to wipe before you hit the big red button and regret it.**
