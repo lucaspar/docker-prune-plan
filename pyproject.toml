@@ -34,17 +34,18 @@
         dev = ["deptry"]
 
 [build-system]
-    requires      = ["setuptools>=67", "wheel"]
-    build-backend = "setuptools.build_meta"
+    requires      = ["uv_build>=0.12.3,<0.13"]
+    build-backend = "uv_build"
 
 [tool.deptry]
     ignore = ["DEP002"]
-
-[tool.setuptools.packages.find]
-    where = ["."]
 
 [[tool.ty.overrides]]
     include = ["docker_prune_plan/**"]
 
     [tool.ty.overrides.rules]
         not-iterable = "ignore"
+
+[tool.uv.build-backend]
+    module-root = "."
+    module-name = "docker_prune_plan"
