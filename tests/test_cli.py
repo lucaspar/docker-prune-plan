@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from unittest.mock import MagicMock, patch
-
-import pytest
+from unittest.mock import MagicMock
 
 from docker_prune_plan.docker_utils import (
     collect_used_images,
@@ -18,7 +16,6 @@ from docker_prune_plan.formatting import (
 )
 from docker_prune_plan.models import PruneItem
 from docker_prune_plan.planners import build_plan_image, build_plan_volume
-
 
 # ---------------------------------------------------------------------------
 # human_size()

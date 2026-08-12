@@ -9,7 +9,6 @@ from docker_prune_plan.docker_utils import (
     collect_used_images,
     collect_used_volumes,
     is_probably_anonymous_volume,
-    normalize_image_id,
     short_id,
 )
 from docker_prune_plan.formatting import human_size

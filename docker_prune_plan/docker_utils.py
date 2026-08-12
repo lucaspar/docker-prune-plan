@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Sequence
+from collections.abc import Mapping, Sequence
 
 
 def short_id(full_id: str) -> str:
@@ -18,7 +18,7 @@ def normalize_image_id(v: str) -> str:
     return v if v.startswith("sha256:") else f"sha256:{v}"
 
 
-def collect_used_volumes(containers: Sequence[dict[str, object]]) -> set[str]:
+def collect_used_volumes(containers: Sequence[Mapping[str, object]]) -> set[str]:
     used: set[str] = set()
     for container in containers:
         for mount in container.get("Mounts", []) or []:
@@ -27,7 +27,7 @@ def collect_used_volumes(containers: Sequence[dict[str, object]]) -> set[str]:
     return used
 
 
-def collect_used_images(containers: Sequence[dict[str, object]]) -> set[str]:
+def collect_used_images(containers: Sequence[Mapping[str, object]]) -> set[str]:
     used: set[str] = set()
     for container in containers:
         image_id = container.get("ImageID")
